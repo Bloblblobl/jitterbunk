@@ -10,7 +10,7 @@
 <form action="{% url 'jitterbunk:create_user' %}" method="post">
     {% csrf_token %}
     <input type="text" name="username" id="username" />
-    <input type="submit" value="Join" />
+    <input type="submit" value="Create User" />
 </form>
 
 {% if user_list %}

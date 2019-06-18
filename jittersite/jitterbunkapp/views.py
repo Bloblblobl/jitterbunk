@@ -75,15 +75,41 @@ def create_user(request):
         return HttpResponseRedirect(reverse('jitterbunk:userlist'))
 
 
+def delete_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    try:
+        user.delete()
+    except:
+        return render(request, 'jitterbunkapp/userdetail.html', {
+            'user': user,
+            'error_message': "Failed to delete user.",
+        })
+    else:
+        return HttpResponseRedirect(reverse('jitterbunk:userlist'))
+
+
 def create_bunk(request):
-    from_user = get_object_or_404(User, pk=request.POST['from_user'])
-    to_user = get_object_or_404(User, pk=request.POST['to_user'])
+    from_user = get_object_or_404(User, pk=request.POST['from_user_id'])
+    to_user = get_object_or_404(User, pk=request.POST['to_user_id'])
     try:
         new_bunk = Bunk(from_user=from_user, to_user=to_user, bunk_date=timezone.now())
         new_bunk.save()
     except:
         return render(request, 'jitterbunkapp/index.html', {
             'error_message': "Failed to bunk.",
+        })
+    else:
+        return HttpResponseRedirect(reverse('jitterbunk:index'))
+
+
+def delete_bunk(request, pk):
+    bunk = get_object_or_404(Bunk, pk=pk)
+    try:
+        bunk.delete()
+    except:
+        return render(request, 'jitterbunkapp/bunkdetail.html', {
+            'bunk': bunk,
+            'error_message': "Failed to delete bunk.",
         })
     else:
         return HttpResponseRedirect(reverse('jitterbunk:index'))

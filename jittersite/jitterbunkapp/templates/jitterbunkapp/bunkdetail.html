@@ -1,3 +1,11 @@
+{% load staticfiles %}
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'jitterbunkapp/style.css' %}"
+/>
+
 <h1>Bunk</h1>
 <p>
     Sent on {{ bunk.bunk_date.date }}
@@ -14,6 +22,11 @@ To: <a href="{% url 'jitterbunk:user' bunk.to_user.id %}">
         {{ bunk.to_user.username }}
       </a>
 </p>
+
+<form action="{% url 'jitterbunk:delete_bunk' bunk.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete Bunk" />
+</form>
 
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>

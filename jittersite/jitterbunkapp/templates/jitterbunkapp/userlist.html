@@ -1,11 +1,6 @@
-{% load staticfiles %}
+{% extends 'base.html' %}
 
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'jitterbunkapp/style.css' %}"
-/>
-
+{% block content %}
 <h1>Create User</h1>
 <form action="{% url 'jitterbunk:create_user' %}" method="post">
     {% csrf_token %}
@@ -25,3 +20,4 @@
 {% else %}
 <p>No users exist!</p>
 {% endif %}
+{% endblock %}

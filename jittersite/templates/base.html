@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'jitterbunkapp/style.css' %}"
+    />
+    <meta charset="utf-8">
+    <title>{% block title %}Jitterbunk{% endblock %}</title>
+</head>
+<body>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

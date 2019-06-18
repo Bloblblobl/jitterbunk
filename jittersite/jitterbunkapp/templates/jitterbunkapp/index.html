@@ -1,11 +1,6 @@
-{% load staticfiles %}
+{% extends 'base.html' %}
 
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'jitterbunkapp/style.css' %}"
-/>
-
+{% block content %}
 {% if user_list %}
 <h1>Bunk Someone!</h1>
 <form action="{% url 'jitterbunk:create_bunk' %}" method="post">
@@ -36,3 +31,4 @@
 {% else %}
 <p>No one has bunked or been bunked.</p>
 {% endif %}
+{% endblock %}

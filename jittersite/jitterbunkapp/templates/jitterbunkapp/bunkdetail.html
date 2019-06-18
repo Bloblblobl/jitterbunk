@@ -1,11 +1,6 @@
-{% load staticfiles %}
+{% extends 'base.html' %}
 
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'jitterbunkapp/style.css' %}"
-/>
-
+{% block content %}
 <h1>Bunk</h1>
 <p>
     Sent on {{ bunk.bunk_date.date }}
@@ -31,3 +26,4 @@ To: <a href="{% url 'jitterbunk:user' bunk.to_user.id %}">
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>
 {% endif %}
+{% endblock %}

@@ -1,11 +1,6 @@
-{% load staticfiles %}
+{% extends 'base.html' %}
 
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'jitterbunkapp/style.css' %}"
-/>
-
+{% block content %}
 <h1>{{ user.username }}</h1>
 <p>
     Joined on {{ user.signup_date.date }}
@@ -42,3 +37,4 @@
 {% if error_message %}
 <p><strong>{{ error_message }}</strong></p>
 {% endif %}
+{% endblock %}

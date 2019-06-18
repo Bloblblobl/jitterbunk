@@ -6,7 +6,28 @@
   href="{% static 'jitterbunkapp/style.css' %}"
 />
 
+{% if user_list %}
+<h1>Bunk Someone!</h1>
+<form action="{% url 'jitterbunk:create_bunk' %}" method="post">
+    {% csrf_token %}
+    <label for="from_user">From:</label>
+    <select name="from_user" id="from_user">
+        {% for user in user_list %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <label for="to_user">To:</label>
+    <select name="to_user" id="to_user">
+        {% for user in user_list %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Bunk" />
+</form>
+{% endif %}
+
 {% if latest_bunks %}
+<h1>Latest Bunks</h1>
 <ul>
   {% for bunk in latest_bunks %}
   <li><a href="{% url 'jitterbunk:bunk' bunk.id %}">{{ bunk }}</a></li>

@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from .models import Bunk, User
 
@@ -14,6 +15,13 @@ class IndexView(generic.ListView):
         return Bunk.objects.filter(
             bunk_date__lte=timezone.now()
         ).order_by('-bunk_date')[:10]
+
+    def get_context_data(self, **kwargs):
+        """Add users to context"""
+        # Call the base implementation first to get a context
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['user_list'] = User.objects.filter(signup_date__lte=timezone.now())
+        return context
 
 
 class BunkView(generic.DetailView):
@@ -52,3 +60,30 @@ class UserView(generic.DetailView):
         context['sent_bunks'] = Bunk.objects.filter(from_user=user.id)
         context['received_bunks'] = Bunk.objects.filter(to_user=user.id)
         return context
+
+
+def create_user(request):
+    try:
+        username = request.POST['username']
+        new_user = User(username=username, signup_date=timezone.now())
+        new_user.save()
+    except:
+        return render(request, 'jitterbunkapp/userlist.html', {
+            'error_message': "Failed to create user.",
+        })
+    else:
+        return HttpResponseRedirect(reverse('jitterbunk:userlist'))
+
+
+def create_bunk(request):
+    from_user = get_object_or_404(User, pk=request.POST['from_user'])
+    to_user = get_object_or_404(User, pk=request.POST['to_user'])
+    try:
+        new_bunk = Bunk(from_user=from_user, to_user=to_user, bunk_date=timezone.now())
+        new_bunk.save()
+    except:
+        return render(request, 'jitterbunkapp/index.html', {
+            'error_message': "Failed to bunk.",
+        })
+    else:
+        return HttpResponseRedirect(reverse('jitterbunk:index'))

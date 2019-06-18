@@ -6,17 +6,15 @@
   href="{% static 'jitterbunkapp/style.css' %}"
 />
 
-{% comment %}
-<!--
-  <form action="{% url 'jitterbunk:create_user' %}" method="post">
-    {% csrf_token %} <input type="text" name="username" id="username" />
-    <input type="submit" value="Create User" />
-  </form>
--->
-{% endcomment %}
+<h1>Create User</h1>
+<form action="{% url 'jitterbunk:create_user' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="username" id="username" />
+    <input type="submit" value="Join" />
+</form>
 
-<h1>User List</h1>
 {% if user_list %}
+<h1>Newest Users</h1>
 <ul>
   {% for user in user_list %}
   <li>

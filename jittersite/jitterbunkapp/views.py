@@ -44,11 +44,11 @@ class UserView(generic.DetailView):
         """Exclude future users."""
         return User.objects.filter(signup_date__lte=timezone.now())
 
-    # def get_context_data(self, **kwargs):
-    #     """Add all sent and received bunks to context"""
-    #     # Call the base implementation first to get a context
-    #     context = super().get_context_data(**kwargs)
-    #     context['user'] = self.object
-    #     context['sent_bunks'] = Bunk.objects.filter(from_user=user.id)
-    #     context['received_bunks'] = Bunk.objects.filter(to_user=user.id)
-    #     return context
+    def get_context_data(self, **kwargs):
+        """Add all sent and received bunks to context"""
+        # Call the base implementation first to get a context
+        context = super(UserView, self).get_context_data(**kwargs)
+        user = context['user']
+        context['sent_bunks'] = Bunk.objects.filter(from_user=user.id)
+        context['received_bunks'] = Bunk.objects.filter(to_user=user.id)
+        return context

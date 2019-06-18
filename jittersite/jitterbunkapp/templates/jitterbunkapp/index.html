@@ -1,0 +1,17 @@
+{% load staticfiles %}
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'jitterbunkapp/style.css' %}"
+/>
+
+{% if latest_bunks %}
+<ul>
+  {% for bunk in latest_bunks %}
+  <li><a href="{% url 'jitterbunk:bunk' bunk.id %}">{{ bunk }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No one has bunked or been bunked.</p>
+{% endif %}

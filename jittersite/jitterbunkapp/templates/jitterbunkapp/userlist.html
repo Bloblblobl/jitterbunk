@@ -1,0 +1,29 @@
+{% load staticfiles %}
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'jitterbunkapp/style.css' %}"
+/>
+
+{% comment %}
+<!--
+  <form action="{% url 'jitterbunkapp:create_user' %}" method="post">
+    {% csrf_token %} <input type="text" name="username" id="username" />
+    <input type="submit" value="Create User" />
+  </form>
+-->
+{% endcomment %}
+
+<h1>User List</h1>
+{% if user_list %}
+<ul>
+  {% for user in user_list %}
+  <li>
+    <a href="{% url 'jitterbunk:user' user.id %}"> {{ user.username }} </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No users exist!</p>
+{% endif %}

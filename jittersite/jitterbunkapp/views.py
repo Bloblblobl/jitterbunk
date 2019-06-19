@@ -15,16 +15,13 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the latest 10 bunks."""
-        return Bunk.objects.filter(
-            bunk_date__lte=timezone.now()
-        ).order_by('-bunk_date')[:10]
+        return Bunk.objects.order_by('-bunk_date')[:10]
 
     def get_context_data(self, **kwargs):
         """Add all users to context"""
         # Call the base implementation first to get a context
         context = super(IndexView, self).get_context_data(**kwargs)
         context['user_list'] = User.objects.filter(
-            date_joined__lte=timezone.now()).filter(
             ~Q(id = self.request.user.id))
         return context
 
@@ -33,10 +30,6 @@ class BunkView(generic.DetailView):
     model = Bunk
     template_name = 'jitterbunkapp/bunkdetail.html'
 
-    def get_queryset(self):
-        """Exclude future bunks."""
-        return Bunk.objects.filter(bunk_date__lte=timezone.now())
-
 
 class UserListView(generic.ListView):
     template_name = 'jitterbunkapp/userlist.html'
@@ -44,9 +37,7 @@ class UserListView(generic.ListView):
 
     def get_queryset(self):
         """Return the latest 10 users."""
-        return User.objects.filter(
-            date_joined__lte=timezone.now()
-        ).order_by('-date_joined')[:10]
+        return User.objects.order_by('-date_joined')[:10]
 
 
 class UserView(generic.DetailView):
@@ -67,9 +58,7 @@ def create_bunk(request):
     from_user = request.user
     to_user = get_object_or_404(User, pk=request.POST['to_user_id'])
     try:
-        new_bunk = Bunk(from_user=from_user,
-                        to_user=to_user,
-                        bunk_date=timezone.now())
+        new_bunk = Bunk(from_user=from_user, to_user=to_user)
         new_bunk.save()
     except:
         return render(request, 'jitterbunkapp/index.html', {

@@ -1,29 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Bunk</h1>
-<p>
-    Sent on {{ bunk.bunk_date.date }}
-    at {{ bunk.bunk_date.time.hour }}:{{ bunk.bunk_date.time.minute }}
+    <h1>Bunk</h1>
+    <p>
+        Sent on {{ bunk.bunk_date.date }}
+        at {{ bunk.bunk_date.time.hour }}:{{ bunk.bunk_date.time.minute }}
 
-</p>
-<p>
-From: <a href="{% url 'jitterbunk:user' bunk.from_user.id %}">
-        {{ bunk.from_user.username }}
-      </a>
-</p>
-<p>
-To: <a href="{% url 'jitterbunk:user' bunk.to_user.id %}">
-        {{ bunk.to_user.username }}
-      </a>
-</p>
+    </p>
+    <p>
+    From: <a href="{% url 'jitterbunk:user' bunk.from_user.id %}">
+            {{ bunk.from_user.username }}
+          </a>
+    </p>
+    <p>
+    To: <a href="{% url 'jitterbunk:user' bunk.to_user.id %}">
+            {{ bunk.to_user.username }}
+          </a>
+    </p>
 
-<form action="{% url 'jitterbunk:delete_bunk' bunk.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Delete Bunk" />
-</form>
+    <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete Bunk" />
+    </form>
 
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>
-{% endif %}
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
 {% endblock %}

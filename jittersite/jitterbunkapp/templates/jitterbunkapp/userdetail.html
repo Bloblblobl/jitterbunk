@@ -1,35 +1,48 @@
 {% extends 'jitterbunkapp/base.html' %}
+{% load app_filters %}
 
 {% block content %}
-<h1>{{ user.username }}</h1>
-<p>
-    Joined on {{ user.signup_date.date }}
-    at {{ user.signup_date.time.hour }}:{{ user.signup_date.time.minute }}
-</p>
+    <h1>{{ user.username }}</h1>
+    <p>
+        Joined on {{ user.date_joined.date }}
+        at {{ user.date_joined.time.hour }}:{{ user.date_joined.time.minute }}
+    </p>
 
-{% if sent_bunks %}
-<h2>Sent Bunks:</h2>
-<ul>
-    {% for bunk in sent_bunks %}
-    <li>
-      <a href="{% url 'jitterbunk:bunk' bunk.id %}"> {{ bunk }} </a>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if user != request.user %}
+        {% with auth=request.user|authenticated %}
+            {% if auth %}
+                <form action="{% url 'jitterbunk:create_bunk' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="to_user_id" value="{{user.id}}">
+                    <input type="submit" value="Bunk 'em!'" />
+                </form>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
 
-{% if received_bunks %}
-<h2>Received Bunks:</h2>
-<ul>
-    {% for bunk in received_bunks %}
-    <li>
-      <a href="{% url 'jitterbunk:bunk' bunk.id %}"> {{ bunk }} </a>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if sent_bunks %}
+    <h2>Sent Bunks:</h2>
+    <ul>
+        {% for bunk in sent_bunks %}
+        <li>
+          <a href="{% url 'jitterbunk:bunk' bunk.id %}"> {{ bunk }} </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-{% if error_message %}
-<p><strong>{{ error_message }}</strong></p>
-{% endif %}
+    {% if received_bunks %}
+    <h2>Received Bunks:</h2>
+    <ul>
+        {% for bunk in received_bunks %}
+        <li>
+          <a href="{% url 'jitterbunk:bunk' bunk.id %}"> {{ bunk }} </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
 {% endblock %}

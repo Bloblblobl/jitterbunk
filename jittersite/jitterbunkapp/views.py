@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from .models import Bunk
 from django.contrib.auth.models import User
@@ -22,7 +23,9 @@ class IndexView(generic.ListView):
         """Add all users to context"""
         # Call the base implementation first to get a context
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['users'] = User.objects.filter(date_joined__lte=timezone.now())
+        context['user_list'] = User.objects.filter(
+            date_joined__lte=timezone.now()).filter(
+            ~Q(id = self.request.user.id))
         return context
 
 
@@ -64,7 +67,9 @@ def create_bunk(request):
     from_user = request.user
     to_user = get_object_or_404(User, pk=request.POST['to_user_id'])
     try:
-        new_bunk = Bunk(from_user=from_user, to_user=to_user, bunk_date=timezone.now())
+        new_bunk = Bunk(from_user=from_user,
+                        to_user=to_user,
+                        bunk_date=timezone.now())
         new_bunk.save()
     except:
         return render(request, 'jitterbunkapp/index.html', {

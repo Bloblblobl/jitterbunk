@@ -1,31 +1,48 @@
 {% extends 'jitterbunkapp/base.html' %}
+{% load app_filters %}
 
 {% block content %}
-{% if user_list %}
-    <h1>Bunk Someone!</h1>
-    {% if request.user.is_authenticated() %}
-        <form action="{% url 'jitterbunk:create_bunk' %}" method="post">
-            <label for="to_user_id">To:</label>
-            <select name="to_user_id" id="to_user_id">
-                {% for user in user_list %}
-                    <option value="{{ user.id }}">{{ user.username }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Bunk" />
-        </form>
-    {% else %}
-        <p>You must be logged in to bunk!</p>
+    {% if user_list %}
+        <h1>Bunk Someone!</h1>
+        {% with auth=request.user|authenticated %}
+            {% if auth %}
+                <form action="{% url 'jitterbunk:create_bunk' %}" method="post">
+                    {% csrf_token %}
+                    <label for="to_user_id">To:</label>
+                    <select name="to_user_id" id="to_user_id">
+                        {% for user in user_list %}
+                            <option value="{{ user.id }}">
+                                {{ user.username }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Bunk" />
+                </form>
+            {% else %}
+                <p>You must be logged in to bunk!</p>
+            {% endif %}
+        {% endwith %}
     {% endif %}
-{% endif %}
 
-{% if latest_bunks %}
-    <h1>Latest Bunks</h1>
-    <ul>
-        {% for bunk in latest_bunks %}
-            <li><a href="{% url 'jitterbunk:bunk' bunk.id %}">{{ bunk }}</a></li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No one has bunked or been bunked.</p>
-{% endif %}
+    {% if latest_bunks %}
+        <h1>Latest Bunks</h1>
+        <ul>
+            {% for bunk in latest_bunks %}
+                <li>
+                    <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        <label for="delete">
+                            <a href="{% url 'jitterbunk:bunk' bunk.id %}">
+                                {{ bunk }}
+                            </a>
+                        </label>
+                        <input type="submit" id="delete" value="X" />
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No one has bunked or been bunked.</p>
+    {% endif %}
 {% endblock %}

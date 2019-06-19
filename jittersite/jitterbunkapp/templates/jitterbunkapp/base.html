@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load app_filters %}
 
 {% block login %}
-    {% if request.user %}
-        {% if request.user.is_authenticated() %}
+    {% with auth=request.user|authenticated %}
+        {% if auth %}
             <p>You are logged in as {{ request.user.username }}.</p>
         {% else %}
             <p>You are not
                 <a href="{% url 'login' %}">logged in</a>
             </p>
         {% endif %}
-    {% endif %}
+    {% endwith %}
 {% endblock %}

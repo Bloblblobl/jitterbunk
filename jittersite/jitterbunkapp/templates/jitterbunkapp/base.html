@@ -5,6 +5,9 @@
     {% with auth=request.user|authenticated %}
         {% if auth %}
             <p>You are logged in as {{ request.user.username }}.</p>
+            <a href="{% url 'accounts:logout' %}">
+                Log out
+            </a>
         {% else %}
             <p>You are not
                 <a href="{% url 'login' %}">logged in</a>

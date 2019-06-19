@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'jitterbunkapp/base.html' %}
 
 {% block content %}
 <h1>{{ user.username }}</h1>
@@ -6,11 +6,6 @@
     Joined on {{ user.signup_date.date }}
     at {{ user.signup_date.time.hour }}:{{ user.signup_date.time.minute }}
 </p>
-
-<form action="{% url 'jitterbunk:delete_user' user.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Delete User" />
-</form>
 
 {% if sent_bunks %}
 <h2>Sent Bunks:</h2>

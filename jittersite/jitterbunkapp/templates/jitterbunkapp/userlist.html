@@ -1,23 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'jitterbunkapp/base.html' %}
 
 {% block content %}
-<h1>Create User</h1>
-<form action="{% url 'jitterbunk:create_user' %}" method="post">
-    {% csrf_token %}
-    <input type="text" name="username" id="username" />
-    <input type="submit" value="Create User" />
-</form>
-
 {% if user_list %}
-<h1>Newest Users</h1>
-<ul>
-  {% for user in user_list %}
-  <li>
-    <a href="{% url 'jitterbunk:user' user.id %}"> {{ user.username }} </a>
-  </li>
-  {% endfor %}
-</ul>
+    <h1>Newest Users</h1>
+    <ul>
+      {% for user in user_list %}
+        <li>
+            <a href="{% url 'jitterbunk:user' user.id %}"> {{ user.username }} </a>
+        </li>
+      {% endfor %}
+    </ul>
 {% else %}
-<p>No users exist!</p>
+    <p>No users exist!</p>
 {% endif %}
 {% endblock %}

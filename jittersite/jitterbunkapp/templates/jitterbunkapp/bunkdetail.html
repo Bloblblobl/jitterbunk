@@ -18,10 +18,12 @@
           </a>
     </p>
 
-    <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Delete Bunk" />
-    </form>
+    {% if request.user = bunk.from_user %}
+        <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Delete Bunk" />
+        </form>
+    {% endif %}
 
     {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>

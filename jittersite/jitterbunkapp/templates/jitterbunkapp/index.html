@@ -30,16 +30,14 @@
         <ul>
             {% for bunk in latest_bunks %}
                 <li>
-                    <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}"
-                          method="post">
-                        {% csrf_token %}
-                        <label for="delete">
-                            <a href="{% url 'jitterbunk:bunk' bunk.id %}">
-                                {{ bunk }}
-                            </a>
-                        </label>
-                        <input type="submit" id="delete" value="X" />
-                    </form>
+                    <a href="{% url 'jitterbunk:bunk' bunk.id %}">{{ bunk }}</a>
+                    {% if request.user = bunk.from_user %}
+                        <form action="{% url 'jitterbunk:delete_bunk' bunk.id %}"
+                              method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="X" />
+                        </form>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
